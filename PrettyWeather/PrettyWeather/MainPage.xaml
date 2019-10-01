@@ -17,30 +17,36 @@
 
     <pancake:PancakeView BackgroundGradientStartColor="{Binding Temp, Converter={converters:BackgroundColorConverter IsStart=True}}"
                          BackgroundGradientEndColor="{Binding Temp, Converter={converters:BackgroundColorConverter IsStart=False}}">
-        <Grid Padding="{OnPlatform Android='0,24,0,0', iOS='0,44,0,0'}"
+       <!--
+    <pancake:PancakeView BackgroundColor="Black">
+     -->
+            <Grid Padding="{OnPlatform Android='0,24,0,0', iOS='0,44,0,0', Tizen='0,60,0,0'}"
               RowSpacing="0">
-
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label
-                HorizontalOptions="Center"
-                Text="SEATTLE" 
-                FontSize="Large"
-                TextColor="{StaticResource MainTextColor}"/>
-            <Image Grid.Row="1"
+            <Image Grid.Row="0" Grid.RowSpan="4"
+                   Grid.Column="0"
                    HorizontalOptions="FillAndExpand"
                    VerticalOptions="FillAndExpand"
                    Opacity=".8"
                    Source="spaceneedle.png"
                    Margin="0,0,0,-80"/>
 
-            <Grid Grid.Row="2" ColumnSpacing="0">
+            <Label Grid.Row="0" Grid.Column="1"
+                HorizontalOptions="Center"
+                Text="SEATTLE" 
+                FontSize="Large"
+                TextColor="{StaticResource MainTextColor}"/>
+            <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" ColumnSpacing="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
@@ -57,20 +63,22 @@
             </Grid>
 
             <Label
-                Grid.Row="3"
+                Grid.Row="2"
+                Grid.Column="1"
                 HorizontalOptions="Center"
                 Text="SUNNY" 
                 FontSize="Large"
                 TextColor="{StaticResource MainTextColor}"/>
             <Label
-                Grid.Row="4"
+                Grid.Row="3"
+                Grid.Column="1"
                 HorizontalOptions="Center"
                 Text="FRIDAY, SEPTEMBER 13" 
                 FontSize="Small"
                 TextColor="{StaticResource MainTextColor}"/>
 
-            <CollectionView Grid.Row="5" Margin="0,20" 
-                            HeightRequest="80" 
+            <CollectionView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,20"
+                            HeightRequest="180" 
                             VerticalOptions="End"
                             ItemsLayout="HorizontalList">
                 <CollectionView.ItemsSource>
@@ -101,6 +109,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
         </Grid>
     </pancake:PancakeView>
 </ContentPage>
