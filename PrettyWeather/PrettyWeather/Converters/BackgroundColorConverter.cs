@@ -12,7 +12,7 @@ namespace PrettyWeather.Converters
         {
             if (value is int temp)
             {
-
+                Console.WriteLine($"#### Temp is {temp}");
                 var resources = Application.Current.Resources;
 
                 if (temp > 60)

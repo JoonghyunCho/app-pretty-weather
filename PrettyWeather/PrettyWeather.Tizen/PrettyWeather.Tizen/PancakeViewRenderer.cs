@@ -90,7 +90,6 @@ namespace PrettyWeather.Tizen
             var pancake = Element as PancakeView;
             if ((pancake.BackgroundGradientStartColor != default(Xamarin.Forms.Color) && pancake.BackgroundGradientEndColor != default(Xamarin.Forms.Color)))
             {
-                Console.WriteLine("@@@@ ### Draw GradientBackground !!");
                 //Console.WriteLine("@@@@@ Draw GradientBackground, Set Background to default: " + _roundRectangle.Color.ToString());
                 Console.WriteLine("_roundRectangle.Geopmetry: " + _roundRectangle.Geometry.ToString());
                 _evasMap = LocalInterop.evas_map_new(4);
