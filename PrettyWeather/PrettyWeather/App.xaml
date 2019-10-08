@@ -19,6 +19,11 @@
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="TextColor" Value="{StaticResource MainTextColor}"/>
             </Style>
+            <Style x:Key="LabelTemperatureStyle_TV" TargetType="Label">
+                <Setter Property="FontSize" Value="210" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="TextColor" Value="{StaticResource MainTextColor}"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

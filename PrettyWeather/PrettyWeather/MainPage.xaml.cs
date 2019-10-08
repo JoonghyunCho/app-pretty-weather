@@ -48,6 +48,9 @@ namespace PrettyWeather
         private void CollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Console.WriteLine("###### CollectionView_SelectionChanged: " + (e.CurrentSelection[0] as City).Name);
+            //Console.WriteLine("###################### 1");
+            //weatherImage.Source = ImageSource.FromUri(new Uri("http://openweathermap.org/img/wn/10n@2x.png"));
+            //Console.WriteLine("###################### 2");
         }
     }
 }

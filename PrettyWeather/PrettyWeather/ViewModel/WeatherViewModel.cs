@@ -18,18 +18,20 @@ namespace PrettyWeather.ViewModel
         public WeatherViewModel()
         {
             _selectedCity = new City();
-            _selectedCity.Name = "";
+            _selectedCity.Name = string.Empty;
         }
 
         public WeatherViewModel(int temp)
         {
             _selectedCity = new City();
-            _selectedCity.Name = "";
+            _selectedCity.Name = string.Empty;
             Temp = temp;
         }
 
         private int _temp = 73;
-        private string _condition;
+        private string _weatherURL = "";
+        private string _weatherURLFormat = "http://openweathermap.org/img/wn/{0}@2x.png";
+        private string _description;
         //private WeatherForecastRoot _forecast;
         //private ICommand _reloadCommand;
         //private ICommand _openFlyoutCommand;
@@ -37,6 +39,13 @@ namespace PrettyWeather.ViewModel
 
         private bool _isBusy = false;
 
+        public string Date
+        {
+            get
+            {
+                return DateTime.Today.ToString("dddd, dd MMMM");
+            }
+        }
 
         ObservableCollection<City> _cities;
         public ObservableCollection<City> Cities
@@ -69,23 +78,43 @@ namespace PrettyWeather.ViewModel
             set
             {
                 _selectedCity = value;
-                if (_selectedCity.CurrentWeather != null)
+                if (_selectedCity.Name != string.Empty)
+                {
                     Temp = _selectedCity.CurrentWeather.Temp;
+                    WeatherURL = string.Format(_weatherURLFormat, _selectedCity.Weather[0].Icon);
+                }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedCity"));
             }
         }
 
-
-        public string Condition
+        public string WeatherURL
         {
-            get { return _condition; }
+            get
+            {
+                return _weatherURL;
+            }
             set
             {
-                _condition = value;
-                //OnPropertyChanged();
-
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedCity"));
+                _weatherURL = value;
+                Console.WriteLine($"########### Weather URL: {_weatherURL}");
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WeatherURL"));
             }
+        }
+
+        public string Description
+        {
+            get {
+                if (SelectedCity == null)
+                    return string.Empty;
+                else
+                    return SelectedCity?.Weather[0].Icon + SelectedCity?.Weather[0].Description; }
+            //set
+            //{
+            //    _description = SelectedCity.Weather[0].Icon + SelectedCity.Weather[0].Description;
+            //    //OnPropertyChanged();
+            //
+            //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedCity"));
+            //}
         }
 
         //public WeatherForecastRoot Forecast
@@ -114,42 +143,6 @@ namespace PrettyWeather.ViewModel
             }
         }
 
-        //string location = "St. Louis";
-        //public string Location
-        //{
-        //    get => location;
-        //    set
-        //    {
-        //        //if (SetProperty(ref location, value))
-        //        //{
-        //        //    _ = GetWeatherAsync();
-        //        //}
-        //    }
-        //}
-
-
-        //public ICommand ReloadCommand =>
-        //    _reloadCommand ??
-        //    (_reloadCommand = new Command(async () => await GetWeatherAsync()));
-        //
-        //public ICommand OpenFlyoutCommand =>
-        //    _openFlyoutCommand ??
-        //    (_openFlyoutCommand = new Command(() => OpenFlyout()));
-        //
-        //public ICommand NavigateToOtherPage =>
-        //    _navToOtherPage ??
-        //    (_navToOtherPage = new Command(() => GoToOther()));
-        //
-        //private void GoToOther()
-        //{
-        //    Shell.Current.GoToAsync("//anything");
-        //}
-        //
-        //private void OpenFlyout()
-        //{
-        //    Shell.Current.FlyoutIsPresented = true;
-        //}
-
         List<Continent> _continents;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -176,34 +169,34 @@ namespace PrettyWeather.ViewModel
             }
         }
 
-        public async Task GetWeatherAsync()
-        {
-            if (IsBusy)
-                return;
-        
-            IsBusy = true;
-            try
-            {
-                WeatherRoot weatherRoot = null;
-                var units = _useCelsius ? Units.Metric : Units.Imperial;
-                weatherRoot = await WeatherService.Instance.GetWeatherAsync(location.Trim(), units);
-                //Forecast = await WeatherService.Instance.GetForecast(weatherRoot.CityId, units);
-                var unit = _useCelsius ? "C" : "F";
-                //Temp = $"{weatherRoot?.MainWeather?.Temperature ?? 0}°{unit}";
-                Temp = Convert.ToInt32(weatherRoot?.MainWeather?.Temperature);
-                Condition = $"{weatherRoot.Name}: {weatherRoot?.Weather?[0]?.Description ?? string.Empty}";
-                CurrentConditionsIcon = weatherRoot?.Weather?[0].Icon;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                //Temp = "Unable to get Weather";
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
+        //public async Task GetWeatherAsync()
+        //{
+        //    if (IsBusy)
+        //        return;
+        //
+        //    IsBusy = true;
+        //    try
+        //    {
+        //        WeatherRoot weatherRoot = null;
+        //        var units = _useCelsius ? Units.Metric : Units.Imperial;
+        //        weatherRoot = await WeatherService.Instance.GetWeatherAsync(location.Trim(), units);
+        //        //Forecast = await WeatherService.Instance.GetForecast(weatherRoot.CityId, units);
+        //        var unit = _useCelsius ? "C" : "F";
+        //        //Temp = $"{weatherRoot?.MainWeather?.Temperature ?? 0}°{unit}";
+        //        Temp = Convert.ToInt32(weatherRoot?.MainWeather?.Temperature);
+        //        Condition = $"{weatherRoot.Name}: {weatherRoot?.Weather?[0]?.Description ?? string.Empty}";
+        //        CurrentConditionsIcon = weatherRoot?.Weather?[0].Icon;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine(ex);
+        //        //Temp = "Unable to get Weather";
+        //    }
+        //    finally
+        //    {
+        //        IsBusy = false;
+        //    }
+        //}
 
         //public async Task GetFlatWeatherAsync(List<string> cities)
         //{
@@ -238,7 +231,7 @@ namespace PrettyWeather.ViewModel
             IsBusy = true;
             try
             {
-                List<string> allCities = WeatherService.NORTH_AMERICA_CITIES.Concat(WeatherService.SOUTH_AMERICA_CITIES).ToList<string>();
+                List<string> allCities = WeatherService.WORLD_CITIES;
 
                 //await GetFlatWeatherAsync(allCities);
                 CitiesWeatherRoot payload = null;

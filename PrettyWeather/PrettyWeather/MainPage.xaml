@@ -41,7 +41,7 @@
             <Label Grid.Row="0" Grid.Column="1"
                 HorizontalOptions="Center"
                 Text="{Binding SelectedCity.Name}"
-                FontSize="Large"
+                FontSize="180"
                 TextColor="{StaticResource MainTextColor}"/>
             <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" ColumnSpacing="0">
                 <Grid.ColumnDefinitions>
@@ -52,37 +52,42 @@
                 <Label
                     Grid.Column="1"
                     Style="{StaticResource LabelTemperatureStyle}"
-                    Text="{Binding SelectedCity.CurrentWeather.Temp}" />
+                    Text="{Binding SelectedCity.CurrentWeather.Temp}"
+                    FontSize="600" />
                 <Label Grid.Column="2"
                    Text="°"
                    Style="{StaticResource LabelTemperatureStyle}"
+                   FontSize="500"
                    HorizontalOptions="Start"/>
             </Grid>
 
-            <Label
-                Grid.Row="2"
-                Grid.Column="1"
-                HorizontalOptions="Center"
-                Text="SUNNY" 
-                FontSize="Large"
-                TextColor="{StaticResource MainTextColor}"/>
+            <StackLayout Spacing="0" Orientation="Horizontal" HorizontalOptions="Center"
+                         Grid.Row="2" Grid.Column="1">
+                <Image Source="{Binding WeatherURL}" VerticalOptions="CenterAndExpand" />
+                <Label
+                    Text="{Binding SelectedCity.Weather[0].Main}"
+                    FontSize="150"
+                    TextColor="{StaticResource MainTextColor}"/>
+            </StackLayout>
 
             <Label
                 Grid.Row="3"
                 Grid.Column="1"
                 HorizontalOptions="Center"
-                Text="FRIDAY, SEPTEMBER 13" 
-                FontSize="Small"
+                Margin="0, 0, 0, 50"
+                Text= "{Binding Date}"
+                FontSize="120"
                 TextColor="{StaticResource MainTextColor}"/>
 
-            <CollectionView x:Name="collection" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,20"
-                            HeightRequest="180"
+            <CollectionView x:Name="collection" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="100,20"
+                            HeightRequest="200"
                             VerticalOptions="End"
                             SelectionMode="Single"
                             ItemsSource="{Binding Cities}"
                             ItemsLayout="HorizontalList"
                             SelectedItem="{Binding SelectedCity}"
-                            SelectionChanged="CollectionView_SelectionChanged">
+                            SelectionChanged="CollectionView_SelectionChanged"
+                            HorizontalScrollBarVisibility="Never">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="10">
@@ -91,7 +96,7 @@
                                 BackgroundColor="#60FFFFFF">
                                 <StackLayout Spacing="0"
                                              VerticalOptions="Center">
-                                    <Label Text="{Binding Name}" WidthRequest="200" FontAttributes="Bold" FontSize="Large" TextColor="White" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Name}" WidthRequest="250" FontAttributes="Bold" FontSize="Large" TextColor="White" HorizontalTextAlignment="Center" HorizontalOptions="Center"/>
                                     <Label Text="{Binding CurrentWeather.Temp, StringFormat='{0:D}°'}"  TextColor="White" FontSize="Large" HorizontalOptions="Center"/>
                                 </StackLayout>
                             </pancake:PancakeView>

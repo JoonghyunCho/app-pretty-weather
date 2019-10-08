@@ -169,6 +169,9 @@ namespace PrettyWeather.Model
 
         [JsonProperty("main")]
         public Main CurrentWeather { get; set; }
+
+        [JsonProperty("weather")]
+        public List<Weather> Weather { get; set; }
     }
 
     public class Continent : List<City>
