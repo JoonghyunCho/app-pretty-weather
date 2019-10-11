@@ -63,7 +63,7 @@
 
             <StackLayout Spacing="0" Orientation="Horizontal" HorizontalOptions="Center"
                          Grid.Row="2" Grid.Column="1">
-                <Image Source="{Binding WeatherURL}" VerticalOptions="CenterAndExpand" />
+                <!--<Image Source="{Binding WeatherURL}" VerticalOptions="CenterAndExpand" />-->
                 <Label
                     Text="{Binding SelectedCity.Weather[0].Main}"
                     FontSize="150"
@@ -87,7 +87,8 @@
                             ItemsLayout="HorizontalList"
                             SelectedItem="{Binding SelectedCity}"
                             SelectionChanged="CollectionView_SelectionChanged"
-                            HorizontalScrollBarVisibility="Never">
+                            HorizontalScrollBarVisibility="Never"
+                            ItemSizingStrategy="MeasureFirstItem">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="10">

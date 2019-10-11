@@ -25,16 +25,6 @@ namespace PrettyWeather
             //{
             //    _ = (BindingContext as PrettyWeather.ViewModel.WeatherViewModel).GetGroupedWeatherAsync();
             //});
-
-
-            //Console.WriteLine("###### vm?");
-            //if (vm.Cities.Count > 0)
-            //{
-            //    Console.WriteLine("###### Update Selected City to :");
-            //    Console.WriteLine("###### Update Selected City to :" + vm.Cities[0]);
-            //    vm.SelectedCity = vm.Cities[0];
-            //}
-            //Console.WriteLine("###### vm? 2");
         }
 
 
