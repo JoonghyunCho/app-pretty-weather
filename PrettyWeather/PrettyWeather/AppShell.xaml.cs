@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,6 +10,29 @@ namespace PrettyWeather
         public AppShell()
         {
             InitializeComponent();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            _ = (BindingContext as ViewModel.WeatherViewModel).GetGroupedWeatherAsync();
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            base.OnBackButtonPressed();
+            var result = DisplayAlert("Exit", "Do you want to exit?", "Yes", "No").ContinueWith(task =>
+            {
+                if(task.Result)
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Application.Current.Quit();
+                    });
+                }
+            });
+            return true;
         }
     }
 }

@@ -7,6 +7,17 @@
              x:Class="PrettyWeather.App">
     <Application.Resources>
         <ResourceDictionary>
+            <Color x:Key="StartColor70">#fc8484</Color>
+            <Color x:Key="EndColor70">#ff5454</Color>
+            <Color x:Key="StartColor60">#FCA184</Color>
+            <Color x:Key="EndColor60">#fc8484</Color>
+            <Color x:Key="StartColor50">#F6CC66</Color>
+            <Color x:Key="EndColor50">#FCA184</Color>
+            <Color x:Key="StartColor40">#BDE3FA</Color>
+            <Color x:Key="EndColor40">#8fbdfe</Color>
+            <Color x:Key="StartColor30">#172941</Color>
+            <Color x:Key="EndColor30">#3C6683</Color>
+            
             <Color x:Key="ColdStartColor">#BDE3FA</Color>
             <Color x:Key="ColdEndColor">#A5C9FD</Color>
             <Color x:Key="WarmStartColor">#F6CC66</Color>

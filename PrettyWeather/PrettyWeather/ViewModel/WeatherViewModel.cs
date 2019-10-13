@@ -14,30 +14,61 @@ namespace PrettyWeather.ViewModel
 {
     public class WeatherViewModel : INotifyPropertyChanged
     {
-        //public int Temp { get; set; }
         public WeatherViewModel()
         {
             _selectedCity = new City();
             _selectedCity.Name = string.Empty;
+
+            _selectedCityItem = new City();
+            _selectedCityItem.Name = string.Empty;
+
         }
 
         public WeatherViewModel(int temp)
         {
             _selectedCity = new City();
             _selectedCity.Name = string.Empty;
+
+            _selectedCityItem = new City();
+            _selectedCityItem.Name = string.Empty;
+
             Temp = temp;
         }
 
-        private int _temp = 73;
+        private int _temp = 50;
         private string _weatherURL = "";
         private string _weatherURLFormat = "http://openweathermap.org/img/wn/{0}@2x.png";
-        private string _description;
-        //private WeatherForecastRoot _forecast;
-        //private ICommand _reloadCommand;
-        //private ICommand _openFlyoutCommand;
-        //private ICommand _navToOtherPage;
-
         private bool _isBusy = false;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        Dictionary<int, string> _cityLandmarks = new Dictionary<int, string>()
+        {
+            { 1835847, "Seoul.png"},{ 2147714,"Sydney.png"},
+            { 5392171, "SanJose.png"},{ 2643743,"London.png"},
+            { 5391959, "SanFrancisco.png"},{ 2968815,"Paris.png"},
+            { 5809844, "Seattle.png"},{ 6356055,"Barcelona.png"},
+            { 5368361, "LosAngeles.png"},{ 2759794,"Amsterdam.png"},
+            { 4407066, "StanleyCup.png"},{ 1273294,"Delhi.png"},
+            { 5128581, "NewYork.png"},{ 1796236,"Shanghai.png"},
+            { 4930956, "Boston.png"},{ 3451190,"RiodeJaneiro.png"},
+            { 4140963, "Washington,D.C..png"},
+            { 6173331, "Vancouver.png"},
+        };
+        
+        string _landmarkSource;
+        public string LandmarkSource
+        {
+            get
+            {
+                return _landmarkSource;
+            }
+            set
+            {
+                _landmarkSource = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LandmarkSource"));
+            }
+        }
 
         public string Date
         {
@@ -47,16 +78,14 @@ namespace PrettyWeather.ViewModel
             }
         }
 
-        ObservableCollection<City> _cities;
-        public ObservableCollection<City> Cities
+        ObservableCollection<City> _allcities;
+        public ObservableCollection<City> AllCities
         {
-            get { return _cities; }
+            get { return _allcities; }
             set
             {
-                _cities = value;
-
-                //OnPropertyChanged();
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Cities"));
+                _allcities = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AllCities"));
             }
         }
 
@@ -66,11 +95,11 @@ namespace PrettyWeather.ViewModel
             set
             {
                 _temp = value;
-                //OnPropertyChanged();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Temp"));
             }
         }
 
+        // Weather Page uses this to show City data
         City _selectedCity;
         public City SelectedCity
         {
@@ -81,9 +110,40 @@ namespace PrettyWeather.ViewModel
                 if (_selectedCity.Name != string.Empty)
                 {
                     Temp = _selectedCity.CurrentWeather.Temp;
-                    WeatherURL = string.Format(_weatherURLFormat, _selectedCity.Weather[0].Icon);
+                    //WeatherURL = string.Format(_weatherURLFormat, _selectedCity.Weather[0].Icon);
+                    _selectedCity.Weather[0].Icon = _selectedCity.Weather[0].Icon.Replace('n', 'd');
+                    WeatherURL = string.Concat("icon/",_selectedCity.Weather[0].Icon,".png");
+                    if (_cityLandmarks.ContainsKey(SelectedCity.Id))
+                        LandmarkSource = string.Concat("landmarks/", _cityLandmarks[SelectedCity.Id]);
+                    foreach (var c in AllCities)
+                    {
+                        c.CurrentCityName = value.Name;
+                    }
                 }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedCity"));
+            }
+        }
+
+        public int SelectedItemIndex
+        {
+            get
+            {
+                return AllCities.IndexOf(SelectedCity);
+            }
+        }
+
+        // Binding to SelectedItem in CollectionView
+        City _selectedCityItem;
+        public City SelectedCityItem
+        {
+            get => _selectedCityItem;
+            set
+            {
+                if (value.Name.Equals("footer"))
+                    return;
+                _selectedCityItem = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedCityItem"));
+                SelectedCity = _selectedCityItem;
             }
         }
 
@@ -96,36 +156,9 @@ namespace PrettyWeather.ViewModel
             set
             {
                 _weatherURL = value;
-                Console.WriteLine($"########### Weather URL: {_weatherURL}");
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WeatherURL"));
             }
         }
-
-        public string Description
-        {
-            get {
-                if (SelectedCity == null)
-                    return string.Empty;
-                else
-                    return SelectedCity?.Weather[0].Icon + SelectedCity?.Weather[0].Description; }
-            //set
-            //{
-            //    _description = SelectedCity.Weather[0].Icon + SelectedCity.Weather[0].Description;
-            //    //OnPropertyChanged();
-            //
-            //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedCity"));
-            //}
-        }
-
-        //public WeatherForecastRoot Forecast
-        //{
-        //    get { return _forecast; }
-        //    set
-        //    {
-        //        _forecast = value;
-        //        //OnPropertyChanged();
-        //    }
-        //}
 
         bool _useCelsius;
         public bool UseCelsius
@@ -133,31 +166,11 @@ namespace PrettyWeather.ViewModel
             get => _useCelsius;
             set
             {
-                //if (SetProperty(ref useCelsius, value))
-                //{
-                //    BackgroundColorConverter.UseCelcius = UseCelsius;
-                //    //OnPropertyChanged(nameof(Temp));
-                //}
                 _useCelsius = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UseCelsius"));
             }
         }
 
-        List<Continent> _continents;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public List<Continent> Continents
-        {
-            get { return _continents; }
-            set
-            {
-                _continents = value;
-                //OnPropertyChanged();
-            }
-        }
-
-        public string CurrentConditionsIcon { get; set; }
         public bool IsBusy
         {
             get {
@@ -169,60 +182,6 @@ namespace PrettyWeather.ViewModel
             }
         }
 
-        //public async Task GetWeatherAsync()
-        //{
-        //    if (IsBusy)
-        //        return;
-        //
-        //    IsBusy = true;
-        //    try
-        //    {
-        //        WeatherRoot weatherRoot = null;
-        //        var units = _useCelsius ? Units.Metric : Units.Imperial;
-        //        weatherRoot = await WeatherService.Instance.GetWeatherAsync(location.Trim(), units);
-        //        //Forecast = await WeatherService.Instance.GetForecast(weatherRoot.CityId, units);
-        //        var unit = _useCelsius ? "C" : "F";
-        //        //Temp = $"{weatherRoot?.MainWeather?.Temperature ?? 0}°{unit}";
-        //        Temp = Convert.ToInt32(weatherRoot?.MainWeather?.Temperature);
-        //        Condition = $"{weatherRoot.Name}: {weatherRoot?.Weather?[0]?.Description ?? string.Empty}";
-        //        CurrentConditionsIcon = weatherRoot?.Weather?[0].Icon;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Debug.WriteLine(ex);
-        //        //Temp = "Unable to get Weather";
-        //    }
-        //    finally
-        //    {
-        //        IsBusy = false;
-        //    }
-        //}
-
-        //public async Task GetFlatWeatherAsync(List<string> cities)
-        //{
-        //    if (IsBusy)
-        //        return;
-        //
-        //    IsBusy = true;
-        //    try
-        //    {
-        //        CitiesWeatherRoot payload = null;
-        //        var units = useCelsius ? Units.Metric : Units.Imperial;
-        //        payload = await WeatherService.Instance.GetWeatherAsync(cities, units);
-        //
-        //        Cities = new ObservableCollection<City>(payload.CityList);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Debug.WriteLine(ex);
-        //        //Temp = "Unable to get Weather";
-        //    }
-        //    finally
-        //    {
-        //        IsBusy = false;
-        //    }
-        //}
-
         public async Task GetGroupedWeatherAsync()
         {
             if (IsBusy)
@@ -233,28 +192,23 @@ namespace PrettyWeather.ViewModel
             {
                 List<string> allCities = WeatherService.WORLD_CITIES;
 
-                //await GetFlatWeatherAsync(allCities);
                 CitiesWeatherRoot payload = null;
                 var units = Units.Imperial;//_useCelsius ? Units.Metric : Units.Imperial;
                 payload = await WeatherService.Instance.GetWeatherAsync(allCities, units);
-                _cities = new ObservableCollection<City>(payload.CityList);
-                //Debug.WriteLine("@@@@@@@@@" + _cities.ToArray());
-                //_continents = new List<Continent>();
-                //_continents.Add(
-                //    new Continent(name:"North America", cities: GetCitiesIn(_cities, WeatherService.NORTH_AMERICA_CITIES))                    
-                //);
+                _allcities = new ObservableCollection<City>(payload.CityList);
 
-                //_continents.Add(
-                //    new Continent(name:"South America", cities: GetCitiesIn(_cities, WeatherService.SOUTH_AMERICA_CITIES))
-                //);
+                if (_allcities.Count > 0)
+                    _allcities[0].Name = "Seoul";
+                PropertyChanged(this, new PropertyChangedEventArgs("AllCities"));
 
-                //OnPropertyChanged(nameof(Continents));
+                if (_allcities.Count > 0)
+                    SelectedCityItem = _allcities[0];
 
-                //OnPropertyChanged(nameof(Cities));
-                PropertyChanged(this, new PropertyChangedEventArgs("Cities"));
+                _allcities.Add(new City()
+                {
+                    Name = "footer"
+                });
 
-                if (_cities.Count > 0)
-                    SelectedCity = _cities[0];
             }
             catch (Exception ex)
             {
@@ -266,10 +220,5 @@ namespace PrettyWeather.ViewModel
                 IsBusy = false;
             }
         }
-
-        //private List<City> GetCitiesIn(List<City> cities, List<string> cityIds)
-        //{
-        //    return cities.Where(x => cityIds.Contains(x.Id.ToString())).ToList();
-        //}
     }
 }

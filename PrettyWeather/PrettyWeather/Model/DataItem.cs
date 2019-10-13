@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace PrettyWeather.Model
@@ -152,8 +153,21 @@ namespace PrettyWeather.Model
         public List<City> CityList { get; set; }
     }
 
-    public class City
+    public class City : INotifyPropertyChanged
     {
+        string _city = "";
+        public string CurrentCityName {
+            get
+            {
+                return _city;
+            }
+            set
+            {
+                _city = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentCityName"));
+            }
+        }
+
         [JsonProperty("id")]
         public int Id { get; set; }
         [JsonProperty("name")]
@@ -172,6 +186,8 @@ namespace PrettyWeather.Model
 
         [JsonProperty("weather")]
         public List<Weather> Weather { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
     public class Continent : List<City>

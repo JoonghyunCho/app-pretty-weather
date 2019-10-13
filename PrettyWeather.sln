@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrettyWeather.Tizen", "PrettyWeather\PrettyWeather.Tizen\PrettyWeather.Tizen\PrettyWeather.Tizen.csproj", "{7DB99886-0579-4EA5-B15F-30D0ACC757C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrettyWeather.Tizen", "PrettyWeather\PrettyWeather.Tizen\PrettyWeather.Tizen.csproj", "{7DB99886-0579-4EA5-B15F-30D0ACC757C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -15,11 +15,11 @@
 
   <ItemGroup>
     <Folder Include="lib\" />
-    <Folder Include="res\" />
+    <Folder Include="res\icon\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PrettyWeather\PrettyWeather.csproj" />
+    <ProjectReference Include="..\PrettyWeather\PrettyWeather.csproj" />
   </ItemGroup>
 
 </Project>

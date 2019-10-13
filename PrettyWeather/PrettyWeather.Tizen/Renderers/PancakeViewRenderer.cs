@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using ElmSharp;
 using PrettyWeather.Tizen;
 using Xamarin.Forms;
 using Xamarin.Forms.PancakeView;
@@ -91,7 +87,7 @@ namespace PrettyWeather.Tizen
             if ((pancake.BackgroundGradientStartColor != default(Xamarin.Forms.Color) && pancake.BackgroundGradientEndColor != default(Xamarin.Forms.Color)))
             {
                 //Console.WriteLine("@@@@@ Draw GradientBackground, Set Background to default: " + _roundRectangle.Color.ToString());
-                Console.WriteLine("_roundRectangle.Geopmetry: " + _roundRectangle.Geometry.ToString());
+                //Console.WriteLine("_roundRectangle.Geopmetry: " + _roundRectangle.Geometry.ToString());
                 _evasMap = LocalInterop.evas_map_new(4);
                 LocalInterop.evas_map_util_points_populate_from_object_full(_evasMap, _roundRectangle.Handle, 0);
                 ElmSharp.Color startColor = pancake.BackgroundGradientStartColor.ToNative();
@@ -104,7 +100,7 @@ namespace PrettyWeather.Tizen
                 LocalInterop.evas_object_map_set(_roundRectangle.Handle, _evasMap);
                 LocalInterop.evas_object_map_enable_set(_roundRectangle.Handle, true);
                 //_roundRectangle.Draw(Control.Geometry);
-                Console.WriteLine("Control.Geopmetry: " + Control.Geometry.ToString());
+                //Console.WriteLine("Control.Geopmetry: " + Control.Geometry.ToString());
             }
         }
 
