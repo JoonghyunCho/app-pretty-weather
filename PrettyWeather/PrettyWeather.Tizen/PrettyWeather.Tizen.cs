@@ -1,5 +1,6 @@
 using PrettyWeather.Tizen;
 using System;
+using Tizen.Appium;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Tizen;
 
@@ -21,6 +22,7 @@ namespace PrettyWeather.Tizen
             var app = new Program();
             global::Xamarin.Forms.Forms.SetFlags("CollectionView_Experimental");
             Forms.Init(app);
+            TizenAppium.StartService();
             ElmSharp.Elementary.FocusAutoScrollMode = ElmSharp.FocusAutoScrollMode.Show;
             app.Run(args);
         }
